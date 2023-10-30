@@ -3,3 +3,6 @@ numpy
 monai
 matplotlib
 jupyter
+nibabel
+matplotlib
+tqdm
