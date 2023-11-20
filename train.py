@@ -43,7 +43,6 @@ def main():
         for index, batch in (pbar := tqdm.tqdm(enumerate(dataloader), total=len(dataloader))):
             inputs, labels = batch["image"].to(device), batch["label"].to(device)
             pred = model(inputs)
-
             loss = loss_func(pred, labels)
 
             loss.backward()
@@ -66,10 +65,13 @@ def main():
 
                 loss = loss_func(pred, labels)
                 total_test_loss += loss.detach().cpu()
-                total_test_metric += dice_metric(y_pred=pred, y=labels).aggregate().item.detach().cpu()
-                pbar.set_postfix({"loss": f"{total_test_loss/(index+1):.3f}", "dice metric": f"{total_test_metric/(index+1):.3f}"})
+                dice_metric(y_pred=pred, y=labels)
+                pbar.set_postfix({"loss": f"{total_test_loss/(index+1):.3f}"})
             test_loss_epochs.append(total_test_loss)
-            test_metric_epochs.append(total_test_metric)
+            dice_metric_value = dice_metric.aggregate().item()
+            dice_metric.reset()
+            print(f"Dice metric value {dice_metric_value}")
+            test_metric_epochs.append(dice_metric_value)
         print("")
     torch.save(model.state_dict, "final_weights.pt")
 if __name__ == "__main__":
