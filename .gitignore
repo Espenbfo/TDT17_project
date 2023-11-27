@@ -3,3 +3,6 @@ vscode
 code
 venv
 **/__pycache__
+*.pt
+*.json
+*.mp4

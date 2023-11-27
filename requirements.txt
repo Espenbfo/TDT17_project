@@ -6,3 +6,4 @@ jupyter
 nibabel
 matplotlib
 tqdm
+opencv-python
